@@ -1,0 +1,2 @@
+mvn:org.hamcrest:hamcrest-all:jar|sources:1.3
+mvn:junit:junit:jar|sources:4.11
