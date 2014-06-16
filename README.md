@@ -1,27 +1,19 @@
 JSON Push Parser
 ================
 
-jsonpp is a non-blocking, push-based JSON parser written in Java.  It is designed to work nicely with rx.Observables, supporting either reading the entire JSON structure into an in-memory representation or emitting results as they get read e.g. items of an array.
+jsonpp is a non-blocking, push-based JSON parser written in Java.
+It is designed to work nicely with rx.Observables and includes rx Operators for some common uses, e.g. reading JSON into an in-memory representation.
+RxJava is not required to use the library, custom adapters can be written to support individual circumstances.
 
 Example
 -------
 
-Build up an in-memory representation of the entire JSON:
+Read an entire JSON value from String chunks:
 
 ```
-Observable<Byte> jsonInput = Observable.from("[1, 2, 3]".getBytes);
-Observable<JsonValue> parsedJson = jsonInput.lift(JsonParser.readFullTree());
-```
+Observable<String> jsonInput = Observable.from("[true, false, \"foo\"]");
 
-Print out elements of an array as they are received:
+Observable<Object> jsonValue = jsonInput.lift(RxJson.jsonAnyFromCharSequences());
 
-```
-Observable<Byte> jsonInput = Observable.from("[1, 2, 3]".getBytes);
-jsonInput.subcribe(JsonParser.subscriber(new JsonArrayParser() {
-
-  @Override
-  public JsonParser onChildItem() {
-    return super.onChildItem().doOnComplete(System.out::println);
-  }
-});
+assertThat(jsonValue.toBlocking().single(), is(asList(true, false, "foo")));
 ```
