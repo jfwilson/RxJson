@@ -18,7 +18,7 @@ public abstract class JsonParser {
         return this;
     }
 
-    public void onComplete() {
+    public void onCompleted() {
         throw new UnsupportedOperationException("Unexpected end of file during " + this);
     }
 }

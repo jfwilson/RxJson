@@ -1,46 +1,33 @@
 package com.github.jfwilson.jsonpp;
 
+import com.github.jfwilson.rxjson.CharSequenceSubscriber;
+import com.github.jfwilson.rxjson.JavaObjectTypeHandler;
 import rx.Observable;
 import rx.Subscriber;
 
 public class RxJson {
-    public static Observable.Operator<Object, CharSequence> jsonAnyFromCharSequences() {
-        return StringSubscriber::new;
+    public static Observable.Operator<Object, CharSequence> fromCharSequencesToJavaObject() {
+        return JavaObjectCharSequenceSubscriber::new;
     }
 
-    public static class StringSubscriber extends Subscriber<CharSequence> {
+    public static class JavaObjectCharSequenceSubscriber extends CharSequenceSubscriber {
 
-        private final Subscriber<? super Object> downstream;
-        private JsonParser parser;
+        private final Subscriber<? super Object> subscriber;
 
-        public StringSubscriber(Subscriber<? super Object> downstream) {
-            this.downstream = downstream;
-            parser = new JsonAnyParser(result -> {
-                downstream.onNext(result);
-                return new JsonEofParser() {
-                    @Override
-                    public void onComplete() {
-                        downstream.onCompleted();
-                    }
-                };
-            });
-        }
-
-        @Override
-        public void onNext(CharSequence s) {
-            for (int i = 0; i < s.length(); ++i) {
-                parser = parser.onNext(s.charAt(i));
-            }
-        }
-
-        @Override
-        public void onCompleted() {
-            parser.onComplete();
+        public JavaObjectCharSequenceSubscriber(Subscriber<? super Object> subscriber) {
+            super(new JavaObjectTypeHandler(subscriber::onNext));
+            this.subscriber = subscriber;
         }
 
         @Override
         public void onError(Throwable e) {
-            downstream.onError(e);
+            subscriber.onError(e);
+        }
+
+        @Override
+        public void onCompleted() {
+            super.onCompleted();
+            subscriber.onCompleted();
         }
     }
 }
