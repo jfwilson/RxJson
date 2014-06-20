@@ -1,5 +1,7 @@
 package com.github.jfwilson.jsonpp;
 
+import com.github.jfwilson.rxjson.core.JsonFormatException;
+
 public abstract class JsonParser {
 
     public static final char DOUBLE_QUOTE = '"';
@@ -14,11 +16,11 @@ public abstract class JsonParser {
 
     public JsonParser onNext(char c) {
         if (WHITESPACE.indexOf(c) < 0)
-            throw new IllegalArgumentException("Unexpected token '" + c + "'");
+            throw JsonFormatException.unexpectedToken(c);
         return this;
     }
 
     public void onCompleted() {
-        throw new UnsupportedOperationException("Unexpected end of file during " + this);
+        throw JsonFormatException.unexpectedCompletion();
     }
 }

@@ -1,11 +1,10 @@
-package com.github.jfwilson.jsonpp;
+package com.github.jfwilson.rxjson.rx;
 
-import com.github.jfwilson.rxjson.CharSequenceSubscriber;
 import com.github.jfwilson.rxjson.JavaObjectTypeHandler;
 import rx.Observable;
 import rx.Subscriber;
 
-public class RxJson {
+public class JsonOperators {
     public static Observable.Operator<Object, CharSequence> fromCharSequencesToJavaObject() {
         return JavaObjectCharSequenceSubscriber::new;
     }

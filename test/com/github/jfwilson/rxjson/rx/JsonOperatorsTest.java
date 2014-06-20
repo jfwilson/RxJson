@@ -1,6 +1,5 @@
-package com.github.jfwilson.jsonpp;
+package com.github.jfwilson.rxjson.rx;
 
-import com.github.jfwilson.rxjson.CharSequenceSubscriber;
 import com.github.jfwilson.rxjson.JavaObjectTypeHandler;
 import com.github.jfwilson.rxjson.NoOpTypeHandler;
 import com.github.jfwilson.rxjson.TypeHandler;
@@ -18,13 +17,13 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class RxJsonTest {
+public class JsonOperatorsTest {
 
     @Test
     public void jsonAny_example() {
         Observable<String> jsonInput = Observable.from("[true, false, \"foo\"]");
 
-        Observable<Object> jsonValue = jsonInput.lift(RxJson.fromCharSequencesToJavaObject());
+        Observable<Object> jsonValue = jsonInput.lift(JsonOperators.fromCharSequencesToJavaObject());
 
         assertThat(jsonValue.toBlocking().single(), is(asList(true, false, "foo")));
     }
@@ -55,7 +54,7 @@ public class RxJsonTest {
     public void jsonAny_emitsAsChunksAreReceived() {
         PublishSubject<String> chunks = PublishSubject.create();
 
-        Observable<Object> json = chunks.lift(RxJson.fromCharSequencesToJavaObject());
+        Observable<Object> json = chunks.lift(JsonOperators.fromCharSequencesToJavaObject());
 
         ArrayList<Notification<Object>> notifications = new ArrayList<>();
         json.materialize().subscribe(notifications::add);

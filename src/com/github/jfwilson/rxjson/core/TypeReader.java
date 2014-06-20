@@ -20,9 +20,9 @@ public class TypeReader extends JsonParser {
     public JsonParser onNext(char c) {
         switch (c) {
             case START_ARRAY:
-                return new ArrayReader(typeHandler.onArray(), outerScope).onStartItem();
+                return new ArrayReader(typeHandler.onArray(), outerScope);
             case START_OBJECT:
-                return new ObjectReader(typeHandler.onObject(), outerScope).readFieldName();
+                return new ObjectReader(typeHandler.onObject(), outerScope);
             case DOUBLE_QUOTE:
                 return readStringContent(s -> {typeHandler.onString(s); return outerScope;});
             case 't':

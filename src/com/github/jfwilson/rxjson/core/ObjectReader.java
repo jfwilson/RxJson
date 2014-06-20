@@ -18,17 +18,21 @@ public class ObjectReader extends JsonParser {
     @Override
     public JsonParser onNext(char c) {
         switch (c) {
-            case COMMA:
-                return readFieldName();
+            case DOUBLE_QUOTE:
+                return readStringContent(ObjectReader.this::readFieldValue);
             case END_OBJECT:
-                objectHandler.onEndObject();
-                return outerScope;
+                return onEndObject();
             default:
                 return super.onNext(c);
         }
     }
 
-    public JsonParser readFieldName() {
+    private JsonParser onEndObject() {
+        objectHandler.onEndObject();
+        return outerScope;
+    }
+
+    private JsonParser readFieldName() {
         return new JsonParser() {
             @Override
             public JsonParser onNext(char c) {
@@ -41,7 +45,23 @@ public class ObjectReader extends JsonParser {
         return new JsonParser() {
             @Override
             public JsonParser onNext(char c) {
-                return COLON == c ? new TypeReader(objectHandler.onField(fieldName), ObjectReader.this) : super.onNext(c);
+                return COLON == c ? new TypeReader(objectHandler.onField(fieldName), readDelimiter()) : super.onNext(c);
+            }
+        };
+    }
+
+    private JsonParser readDelimiter() {
+        return new JsonParser() {
+            @Override
+            public JsonParser onNext(char c) {
+                switch (c) {
+                    case COMMA:
+                        return readFieldName();
+                    case END_OBJECT:
+                        return onEndObject();
+                    default:
+                        return super.onNext(c);
+                }
             }
         };
     }

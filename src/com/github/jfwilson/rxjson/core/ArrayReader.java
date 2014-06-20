@@ -15,18 +15,34 @@ public class ArrayReader extends JsonParser {
 
     @Override
     public JsonParser onNext(char c) {
-        switch (c) {
-            case COMMA:
-                return onStartItem();
-            case END_ARRAY:
-                arrayHandler.onEndArray();
-                return outerScope;
-            default:
-                return super.onNext(c);
+        if (WHITESPACE.indexOf(c) >= 0)
+            return this;
+        if (END_ARRAY == c) {
+            return onEndArray();
         }
+        return new DelimiterReader().onItem().onNext(c);
     }
 
-    public JsonParser onStartItem() {
-        return new TypeReader(arrayHandler.onItem(), this);
+    public JsonParser onEndArray() {
+        arrayHandler.onEndArray();
+        return outerScope;
+    }
+
+    public class DelimiterReader extends JsonParser {
+        @Override
+        public JsonParser onNext(char c) {
+            switch (c) {
+                case COMMA:
+                    return onItem();
+                case END_ARRAY:
+                    return onEndArray();
+                default:
+                    return super.onNext(c);
+            }
+        }
+
+        public JsonParser onItem() {
+            return new TypeReader(arrayHandler.onItem(), this);
+        }
     }
 }
