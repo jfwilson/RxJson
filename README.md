@@ -13,7 +13,7 @@ Read JSON from a String as a Java object:
 ```
 Observable<String> jsonInput = Observable.from("[true, false, \"foo\"]");
 
-Observable<Object> jsonValue = jsonInput.lift(RxJson.fromCharSequencesToJavaObject());
+Observable<Object> jsonValue = jsonInput.lift(fromCharSequencesToJavaObject());
 
 assertThat(jsonValue.toBlocking().single(), is(asList(true, false, "foo")));
 ```
@@ -23,17 +23,7 @@ Respond to elements of an array as they are received:
 ```
 PublishSubject<String> jsonInput = PublishSubject.create();
 
-jsonInput.subscribe(new CharSequenceSubscriber(new NoOpTypeHandler() {
-    @Override
-    public ArrayHandler onArray() {
-        return new NoOpArrayHandler() {
-            @Override
-            public TypeHandler onItem() {
-                return new JavaObjectTypeHandler(System.out::println);
-            }
-        };
-    }
-}));
+jsonInput.subscribe(fromCharSequences(onArray(() -> onAny(System.out::println))));
 
 jsonInput.onNext("[true,");                 // prints out 'true'
 jsonInput.onNext(       "false, \"fo");     // prints out 'false'

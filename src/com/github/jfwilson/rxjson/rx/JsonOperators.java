@@ -1,12 +1,17 @@
 package com.github.jfwilson.rxjson.rx;
 
 import com.github.jfwilson.rxjson.JavaObjectTypeHandler;
+import com.github.jfwilson.rxjson.TypeHandler;
 import rx.Observable;
 import rx.Subscriber;
 
 public class JsonOperators {
     public static Observable.Operator<Object, CharSequence> fromCharSequencesToJavaObject() {
         return JavaObjectCharSequenceSubscriber::new;
+    }
+
+    public static CharSequenceSubscriber fromCharSequences(TypeHandler typeHandler) {
+        return new CharSequenceSubscriber(typeHandler);
     }
 
     public static class JavaObjectCharSequenceSubscriber extends CharSequenceSubscriber {

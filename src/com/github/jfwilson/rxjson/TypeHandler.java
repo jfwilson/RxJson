@@ -18,13 +18,13 @@ public interface TypeHandler {
 
         public TypeHandler onItem();
 
-        public void onEndArray();
+        public default void onEndArray() {}
     }
 
     public static interface ObjectHandler {
 
         public TypeHandler onField(String name);
 
-        public void onEndObject();
+        public default void onEndObject() {}
     }
 }
