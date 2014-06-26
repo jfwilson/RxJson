@@ -1,7 +1,7 @@
 package com.github.jfwilson.rxjson.rx;
 
-import com.github.jfwilson.jsonpp.JsonEofParser;
-import com.github.jfwilson.jsonpp.JsonParser;
+import com.github.jfwilson.rxjson.core.JsonEofParser;
+import com.github.jfwilson.rxjson.core.JsonParser;
 import com.github.jfwilson.rxjson.TypeHandler;
 import com.github.jfwilson.rxjson.core.TypeReader;
 import rx.Subscriber;

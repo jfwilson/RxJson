@@ -1,7 +1,5 @@
 package com.github.jfwilson.rxjson.core;
 
-import com.github.jfwilson.jsonpp.JsonEofParser;
-import com.github.jfwilson.jsonpp.JsonParser;
 import com.github.jfwilson.rxjson.JavaObjectTypeHandler;
 import com.github.jfwilson.rxjson.TypeHandler;
 

@@ -1,6 +1,4 @@
-package com.github.jfwilson.jsonpp;
-
-import com.github.jfwilson.rxjson.core.JsonFormatException;
+package com.github.jfwilson.rxjson.core;
 
 public abstract class JsonParser {
 

@@ -1,4 +1,4 @@
-package com.github.jfwilson.jsonpp;
+package com.github.jfwilson.rxjson.core;
 
 import java.util.function.Function;
 

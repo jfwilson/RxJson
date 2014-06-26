@@ -1,10 +1,9 @@
 package com.github.jfwilson.rxjson.core;
 
-import com.github.jfwilson.jsonpp.JsonParser;
 import com.github.jfwilson.rxjson.TypeHandler;
 
-import static com.github.jfwilson.jsonpp.JsonConstantParser.readConstantContent;
-import static com.github.jfwilson.jsonpp.JsonStringParser.readStringContent;
+import static com.github.jfwilson.rxjson.core.JsonConstantParser.readConstantContent;
+import static com.github.jfwilson.rxjson.core.JsonStringParser.readStringContent;
 
 public class TypeReader extends JsonParser {
 
