@@ -5,7 +5,7 @@ import com.github.jfwilson.rxjson.TypeHandler;
 import rx.Observable;
 import rx.Subscriber;
 
-public class JsonOperators {
+public class RxJson {
     public static Observable.Operator<Object, CharSequence> fromCharSequencesToJavaObject() {
         return JavaObjectCharSequenceSubscriber::new;
     }
