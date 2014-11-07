@@ -3,6 +3,7 @@ package com.github.jfwilson.rxjson.core;
 import com.github.jfwilson.rxjson.TypeHandler;
 
 import static com.github.jfwilson.rxjson.core.JsonConstantParser.readConstantContent;
+import static com.github.jfwilson.rxjson.core.JsonNumberParser.readNumericContent;
 import static com.github.jfwilson.rxjson.core.JsonStringParser.readStringContent;
 
 public class TypeReader extends JsonParser {
@@ -31,7 +32,10 @@ public class TypeReader extends JsonParser {
             case 'n':
                 return readConstantContent("null", () -> {typeHandler.onNull(); return outerScope;});
             default:
-                return super.onNext(c);
+                if (c <= '9' && (c == '-' || c >= '0'))
+                    return readNumericContent(n -> {typeHandler.onNumber(n); return outerScope;}).onNext(c);
+                else
+                    return super.onNext(c);
         }
     }
 }
